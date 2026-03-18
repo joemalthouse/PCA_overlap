@@ -1,0 +1,19 @@
+Bhattacharyya coefficient heatmaps...
+Cartesian PCA: diagonal mean = 0.9841, off-diag min = 0.9105
+Dihedral PCA: diagonal mean = 0.9827, off-diag min = 0.8707
+KDE contour plots...
+/user/work/lh22089/PCA/figures/kde_cart_ox.pdf
+/user/work/lh22089/PCA/figures/kde_cart_red.pdf
+/user/work/lh22089/PCA/figures/kde_cart_overlay.pdf
+/user/work/lh22089/PCA/figures/kde_dihed_ox.pdf
+/user/work/lh22089/PCA/figures/kde_dihed_red.pdf
+/user/work/lh22089/PCA/figures/kde_dihed_overlay.pdf
+Done:
+bhattacharyya_cart.pdf
+bhattacharyya_dihed.pdf
+kde_cart_overlay.pdf
+kde_cart_ox.pdf
+kde_cart_red.pdf
+kde_dihed_overlay.pdf
+kde_dihed_ox.pdf
+kde_dihed_red.pdf

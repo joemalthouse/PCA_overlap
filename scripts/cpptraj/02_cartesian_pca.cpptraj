@@ -1,0 +1,204 @@
+# Cartesian (Cα) PCA — joint covariance, eigendecomposition, per-replica projection.
+# Run from the project root.
+#
+# Reads:  Cα-aligned streams (analysis/work/pca/cartesian/) and joint average PDB.
+# Writes: PCA/data/cart_eigenfrac.dat, PCA/data/cart_{ox,red}_rep{0-9}.dat
+
+parm repeats/m4D2_input/m4D2_ox_solv.prmtop [POX]
+parm repeats/m4D2_input/m4D2_red_solv.prmtop [PRED]
+parmbox parm [POX] nobox
+parmbox parm [PRED] nobox
+parm analysis/metrics/pca/cartesian/projections/joint/common/avg_ref_ca.pdb [REFCA]
+reference analysis/metrics/pca/cartesian/projections/joint/common/avg_ref_ca.pdb @CA parm [REFCA] [AVG]
+
+# ── Covariance matrix and eigendecomposition ──
+
+trajin analysis/work/pca/cartesian/ox/rep0/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep1/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep2/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep3/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep4/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep5/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep6/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep7/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep8/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep9/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/red/rep0/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep1/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep2/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep3/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep4/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep5/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep6/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep7/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep8/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep9/aligned.nc parm [PRED]
+
+rms RMSD_FIT ref [AVG] @CA
+matrix covar name M_CA @CA
+run
+
+runanalysis diagmatrix M_CA vecs 20 name MODES_CA out PCA/data/cart_eigenvalues.dat
+runanalysis modes eigenval name MODES_CA out PCA/data/cart_eigenfrac.dat
+
+# ── Per-replica projections onto PC1-20 ──
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep0/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep0.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep1/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep1.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep2/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep2.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep3/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep3.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep4/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep4.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep5/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep5.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep6/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep6.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep7/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep7.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep8/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep8.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep9/aligned.nc parm [POX]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_ox_rep9.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep0/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep0.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep1/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep1.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep2/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep2.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep3/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep3.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep4/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep4.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep5/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep5.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep6/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep6.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep7/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep7.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep8/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep8.dat beg 1 end 20
+run
+
+clear actions
+removedata RMSD_FIT
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep9/aligned.nc parm [PRED]
+rms RMSD_FIT ref [AVG] @CA
+projection evecs MODES_CA @CA out PCA/data/cart_red_rep9.dat beg 1 end 20
+run

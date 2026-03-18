@@ -1,0 +1,247 @@
+# Dihedral (φ/ψ) PCA — joint covariance, eigendecomposition, per-replica projection.
+# Run from the project root.
+#
+# Reads:  Cα-aligned streams (analysis/work/pca/cartesian/).
+# Writes: PCA/data/dihed_eigenfrac.dat, PCA/data/dihed_{ox,red}_rep{0-9}.dat
+
+parm repeats/m4D2_input/m4D2_ox_solv.prmtop [POX]
+parm repeats/m4D2_input/m4D2_red_solv.prmtop [PRED]
+parmbox parm [POX] nobox
+parmbox parm [PRED] nobox
+
+# ── Build joint φ/ψ time series and dihedral covariance ──
+
+trajin analysis/work/pca/cartesian/ox/rep0/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep1/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep2/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep3/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep4/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep5/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep6/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep7/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep8/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/ox/rep9/aligned.nc parm [POX]
+trajin analysis/work/pca/cartesian/red/rep0/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep1/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep2/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep3/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep4/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep5/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep6/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep7/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep8/aligned.nc parm [PRED]
+trajin analysis/work/pca/cartesian/red/rep9/aligned.nc parm [PRED]
+
+multidihedral PHIPSI phi psi
+run
+
+clear actions
+matrix dihcovar dihedrals PHIPSI[*] name M_PHIPSI
+run
+
+runanalysis diagmatrix M_PHIPSI vecs 20 name MODES_PHIPSI out PCA/data/dihed_eigenvalues.dat
+runanalysis modes eigenval name MODES_PHIPSI out PCA/data/dihed_eigenfrac.dat
+
+# ── Per-replica projections onto PC1-20 ──
+# Each block recomputes dihedrals for one replica, then projects onto the
+# joint eigenvectors. Datasets are cleared between blocks to avoid clashes.
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep0/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep0.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep1/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep1.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep2/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep2.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep3/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep3.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep4/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep4.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep5/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep5.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep6/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep6.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep7/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep7.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep8/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep8.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/ox/rep9/aligned.nc parm [POX]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_ox_rep9.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep0/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep0.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep1/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep1.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep2/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep2.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep3/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep3.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep4/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep4.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep5/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep5.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep6/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep6.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep7/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep7.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep8/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep8.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
+
+clear actions
+removedata PHIPSI_REP[*]
+clear trajin
+trajin analysis/work/pca/cartesian/red/rep9/aligned.nc parm [PRED]
+multidihedral PHIPSI_REP phi psi
+run
+clear actions
+projection evecs MODES_PHIPSI out PCA/data/dihed_red_rep9.dat beg 1 end 20 dihedrals PHIPSI_REP[*]
+run
